@@ -1,6 +1,8 @@
 package com.admiral.springBootExample1.demo.utility;
 
 import com.admiral.springBootExample1.demo.dto.ExceptionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +13,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
+
 @RestControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+
+    Logger logger= LoggerFactory.getLogger(CustomExceptionHandler.class);
 
     @ExceptionHandler(StudentNotFound.class)
     public ResponseEntity<ExceptionResponse> handleStudentNotFoundException(StudentNotFound studentNotFound, WebRequest webRequest){
@@ -20,6 +25,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse.setMessage(studentNotFound.getMessage());
         exceptionResponse.setDetails(webRequest.getDescription(false));
         exceptionResponse.setTimeStamp(LocalDateTime.now());
+        logger.error("Student Not found : " ,exceptionResponse);
         return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.NOT_FOUND);
     }
 
@@ -29,6 +35,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse.setMessage(studentAlreadyPresent.getMessage());
         exceptionResponse.setDetails(webRequest.getDescription(false));
         exceptionResponse.setTimeStamp(LocalDateTime.now());
+        logger.error("Student Already Present : " ,exceptionResponse);
         return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -38,6 +45,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         exceptionResponse.setMessage(exception.getMessage());
         exceptionResponse.setDetails(webRequest.getDescription(false));
         exceptionResponse.setTimeStamp(LocalDateTime.now());
+        logger.error("Exception : " ,exceptionResponse);
         return new ResponseEntity<ExceptionResponse>(exceptionResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

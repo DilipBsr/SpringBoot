@@ -3,9 +3,12 @@ package com.admiral.springBootExample1.demo.service;
 import com.admiral.springBootExample1.demo.dto.StudentDto;
 import com.admiral.springBootExample1.demo.entity.StudentEntity;
 import com.admiral.springBootExample1.demo.repository.StudentRepository;
+import com.admiral.springBootExample1.demo.utility.CustomExceptionHandler;
 import com.admiral.springBootExample1.demo.utility.StudentAlreadyPresent;
 import com.admiral.springBootExample1.demo.utility.StudentNotFound;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,8 @@ import java.util.Optional;
 
 @Service
 public class StudentService {
+
+    Logger logger= LoggerFactory.getLogger(StudentService.class);
 
 
     @Autowired
@@ -40,6 +45,7 @@ public class StudentService {
             throw new StudentNotFound("Student Not Found!!");
         }
         StudentDto studentDto=mapper.map(studentEntity,StudentDto.class);
+        logger.info("Student : "+studentDto.getId());
         return studentDto;
     }
 
@@ -50,6 +56,7 @@ public class StudentService {
             throw new StudentAlreadyPresent("Student Already Present!!");
         }
         studentEntity=studentRepository.save(studentEntity);
+        logger.info("Student : "+studentDto.getId()+" Added!!");
         return studentEntity.getId();
     }
 
@@ -63,6 +70,7 @@ public class StudentService {
         StudentEntity studentEntity=mapper.map(studentDto,StudentEntity.class);
         studentEntity.setId(studentOptional.get().getId());
         studentRepository.save(studentEntity);
+        logger.info("Student : "+studentDto.getId()+" Updated!!");
         return "Student Updated Successfully!! "+id;
     }
 }
