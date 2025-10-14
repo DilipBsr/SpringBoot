@@ -4,14 +4,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.NotNull;
 
 public class StudentDto {
-    @NotNull
-    @GeneratedValue
+//    @NotNull
+//    @GeneratedValue
     private Long id;
 
     @NotNull
-    @Column(name="StudentName")
     private String name;
-
 
     private String department;
 
