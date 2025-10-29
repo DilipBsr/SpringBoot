@@ -11,12 +11,14 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class StudentServiceTest {
+
     StudentDto studentDto=new StudentDto();
     StudentEntity studentEntity=new StudentEntity();
     @InjectMocks
@@ -41,6 +43,15 @@ public class StudentServiceTest {
         Mockito.when(studentRepository.findByPassportNo(Mockito.any())).thenReturn(studentOptional);
         Mockito.when(studentRepository.save(Mockito.any())).thenReturn(studentEntity);
         assertEquals(123443L,studentService.addStudent(studentDto));
-//        assertThrows()
+    }
+
+    @Test
+    public void getAllStudentsHappyPath(){
+        List<StudentEntity> entities=List.of(studentEntity);
+        Mockito.when(studentRepository.findAll()).thenReturn(entities);
+
+        List<StudentDto> result=studentService.getAllStudents();
+
+        assertNotNull(result);
     }
 }
