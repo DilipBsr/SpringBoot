@@ -10,5 +10,4 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository <StudentEntity, Long>{
     Optional<StudentEntity> findByPassportNo(String passportNo);
-
 }
